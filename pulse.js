@@ -8,7 +8,7 @@ import React, {
     Image,
     StyleSheet,
   } from 'react-native';
-  
+
   const styles = StyleSheet.create({
       container: {
           position: 'absolute',
@@ -23,9 +23,9 @@ import React, {
           borderColor: '#fff',
       }
   });
-  
+
   export default class Pulse extends Component {
-  
+
       static propTypes = {
           style: PropTypes.object,
           image: PropTypes.object,
@@ -35,8 +35,8 @@ import React, {
           speed: PropTypes.number,
           duration: PropTypes.number
       };
-  
-  
+
+
       static defaultProps = {
           style: {
               top: 0,
@@ -51,10 +51,10 @@ import React, {
           speed: 10,
           duration: 1000
       }
-  
+
       constructor(props){
           super(props);
-  
+
           this.state = {
               started: false,
               style: this.props.style,
@@ -66,84 +66,84 @@ import React, {
               duration: this.props.duration,
               pulses: []
           };
-  
+
       }
-  
+
       mounted = true;
-  
+
       componentDidMount(){
           const {numPulses, duration, speed} = this.state;
-  
+
           this.setState({started: true});
-  
+
           let a = 0;
           while(a < numPulses){
               this.createPulseTimer = setTimeout(()=>{
                   this.createPulse(a);
               }, a * duration);
-  
+
               a++;
           }
-  
+
           this.timer = setInterval(() => {
               this.updatePulse();
           }, speed);
       }
-  
+
       componentWillUnmount(){
           this.mounted = false;
           clearTimeout(this.createPulseTimer);
           clearInterval(this.timer);
       }
-  
+
       createPulse = (pKey) => {
-  
+
           if (this.mounted) {
               let pulses = this.state.pulses;
-  
+
               let pulse = {
                   pulseKey: pulses.length + 1,
                   diameter: 0,
-                  opacity: 1
+                  opacity: 0
               };
-  
+
               pulses.push(pulse);
-  
+
               this.setState({pulses});
           }
-  
+
       }
-  
+
       updatePulse = () => {
-  
+
           if (this.mounted) {
               const pulses = this.state.pulses.map((p, i) => {
                   let maxDiameter = this.state.maxDiameter;
                   let newDiameter = (p.diameter > maxDiameter ? 0 : p.diameter + 2);
                   let centerOffset = ( maxDiameter - newDiameter ) / 2;
                   let opacity = Math.abs( ( newDiameter / this.state.maxDiameter ) - 1 ) * 2;
-  
+
                   let pulse = {
                       pulseKey: i + 1,
                       diameter: newDiameter,
                       opacity: opacity > 1 ? 1 : opacity,
                       centerOffset: centerOffset
                   };
-  
+
                   return pulse;
-  
+
               });
-  
+
               this.setState({pulses});
           }
-  
+
       }
-  
+
       render(){
           const {style, image, maxDiameter, color, started, pulses} = this.state;
           const wrapperStyle = [styles.container, style];
           const containerStyle = {width: maxDiameter, height: maxDiameter};
-  
+
           return (
               <View style={wrapperStyle}>
                   {started &&
@@ -175,7 +175,6 @@ import React, {
                   }
               </View>
           )
-  
+
       }
   }
-  
