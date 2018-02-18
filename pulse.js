@@ -19,7 +19,7 @@ import React, {
       pulse: {
           position: 'absolute',
           flex: 1,
-          borderWidth: 1,
+          borderWidth: 2,
           borderColor: '#fff',
       }
   });
